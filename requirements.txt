@@ -14,7 +14,5 @@ Flask-Cors==4.0.1
 gunicorn==22.0.0      
 requests==2.32.3
 python-json-logger==2.0.7
-cloudpickle==3.0.0
 ipykernel
 xgboost
-lightgbm
