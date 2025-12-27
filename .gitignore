@@ -5,5 +5,7 @@ logs/
 __pycache__/
 .vscode/
 *.pyc
+Testing/
 .DS_Store
 .venv/
+artifacts/
