@@ -16,3 +16,4 @@ requests==2.32.3
 python-json-logger==2.0.7
 ipykernel
 xgboost
+pymongo[srv]==3.12
