@@ -8,3 +8,9 @@ class DataIngestionConfig:
     DATABASE_NAME: str
     COLLECTION_NAME: str
     local_data_file: Path
+
+@dataclass
+class DataValidationConfig:
+    root_dir: Path
+    local_data_file: Path
+    STATUS_FILE: Path
