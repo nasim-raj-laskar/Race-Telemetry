@@ -10,3 +10,11 @@ data_validation:
   root_dir: artifacts/data_validation
   local_data_file: artifacts/data_ingestion/raw.csv
   STATUS_FILE: artifacts/data_validation/status.txt
+
+data_transformation:
+  raw_data_path: artifacts/data_ingestion/raw.csv
+  processed_dir: artifacts/data_transformation
+  processed_file_path: artifacts/data_transformation/telemetry_features.csv
+  train_path: artifacts/data_transformation/train.csv
+  val_path: artifacts/data_transformation/val.csv
+  test_path: artifacts/data_transformation/test.csv

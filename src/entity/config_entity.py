@@ -14,3 +14,12 @@ class DataValidationConfig:
     root_dir: Path
     local_data_file: Path
     STATUS_FILE: Path
+
+@dataclass
+class DataTransformationConfig:
+    raw_data_path: Path
+    processed_dir: Path
+    processed_file_path: Path
+    train_path: Path
+    val_path: Path
+    test_path: Path

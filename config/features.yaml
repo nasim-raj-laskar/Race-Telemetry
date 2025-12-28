@@ -1,0 +1,33 @@
+DROP_COLUMNS:
+  - "_id"
+  - "Unnamed: 0"
+  - "timestamp_ms"
+  - "since_last_ns"
+
+NUMERIC_FEATURES:
+  - speed
+  - current_engine_rpm
+  - acceleration_magnitude
+  - velocity_magnitude
+  - tire_stress_front
+  - tire_stress_rear
+  - wheel_slip_magnitude_front
+  - wheel_slip_magnitude_rear
+  - avg_tire_temp
+  - power
+  - torque
+  - boost
+  - yaw
+  - pitch
+  - roll
+  - steer
+  - rpm_speed_ratio
+
+CATEGORICAL_FEATURES:
+  - gear
+  - lap_number
+  - race_position
+
+LABEL_COLUMNS:
+  - current_lap_time
+  - gear
