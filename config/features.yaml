@@ -31,3 +31,60 @@ CATEGORICAL_FEATURES:
 LABEL_COLUMNS:
   - current_lap_time
   - gear
+
+
+lap_time_regressor:
+  features:
+    - speed
+    - current_engine_rpm
+    - acceleration_magnitude
+    - velocity_magnitude
+    - tire_stress_front
+    - tire_stress_rear
+    - wheel_slip_magnitude_front
+    - wheel_slip_magnitude_rear
+    - avg_tire_temp
+    - power
+    - torque
+    - boost
+    - yaw
+    - pitch
+    - roll
+    - steer
+    - rpm_speed_ratio
+    - gear
+    - lap_number
+    - race_position
+
+gear_classifier:
+  features:
+    - speed
+    - current_engine_rpm
+    - acceleration_magnitude
+    - velocity_magnitude
+    - tire_stress_front
+    - tire_stress_rear
+    - wheel_slip_magnitude_front
+    - wheel_slip_magnitude_rear
+    - avg_tire_temp
+    - power
+    - torque
+    - boost
+    - yaw
+    - pitch
+    - roll
+    - steer
+    - rpm_speed_ratio
+    - lap_number
+    - race_position
+
+driving_behavior:
+  aggregation:
+    acceleration_magnitude: [mean, std]
+    steer: [mean, std]
+    yaw: [std]
+    wheel_slip_magnitude_front: [mean, max]
+    wheel_slip_magnitude_rear: [mean, max]
+    tire_stress_front: [mean]
+    tire_stress_rear: [mean]
+    rpm_speed_ratio: [mean, std]

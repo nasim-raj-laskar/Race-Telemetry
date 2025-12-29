@@ -18,3 +18,12 @@ data_transformation:
   train_path: artifacts/data_transformation/train.csv
   val_path: artifacts/data_transformation/val.csv
   test_path: artifacts/data_transformation/test.csv
+
+
+model_trainer:
+  model_root_dir: artifacts/model_trainer
+  train_path: artifacts/data_transformation/train.csv
+  val_path: artifacts/data_transformation/val.csv
+  regression_dir: artifacts/model_trainer/regression
+  classification_dir: artifacts/model_trainer/classification
+  clustering_dir: artifacts/model_trainer/clustering

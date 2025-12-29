@@ -1,1 +1,15 @@
-models: {}
+models:
+  lap_time_regressor:
+    type: regression
+    target: current_lap_time
+    artifact_dir: regression
+
+  gear_classifier:
+    type: classification
+    target: gear
+    artifact_dir: classification
+
+  driving_behavior:
+    type: clustering
+    level: lap
+    artifact_dir: clustering
