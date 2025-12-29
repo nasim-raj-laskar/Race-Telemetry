@@ -1,7 +1,7 @@
 import os
 from src.constants import *
 from src.utils.common import *
-from src.entity.config_entity import DataIngestionConfig, DataValidationConfig , DataTransformationConfig
+from src.entity.config_entity import DataIngestionConfig, DataValidationConfig , DataTransformationConfig , ModelTrainerConfig
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -68,3 +68,21 @@ class ConfigurationManager:
         )
 
         return data_transformation_config
+    
+#----------------------------------------------------------------
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        config = self.config.model_trainer
+
+        create_directories([config.regression_dir, config.classification_dir, config.clustering_dir])
+
+        model_trainer_config = ModelTrainerConfig(
+            model_root_dir=Path(config.model_root_dir),
+            train_path=Path(config.train_path),
+            val_path=Path(config.val_path),
+            regression_dir=Path(config.regression_dir),
+            classification_dir=Path(config.classification_dir),
+            clustering_dir=Path(config.clustering_dir),
+       
+        )
+
+        return model_trainer_config

@@ -23,3 +23,12 @@ class DataTransformationConfig:
     train_path: Path
     val_path: Path
     test_path: Path
+
+@dataclass
+class ModelTrainerConfig:
+    model_root_dir:Path
+    train_path:Path
+    val_path:Path
+    regression_dir:Path
+    classification_dir:Path
+    clustering_dir:Path
