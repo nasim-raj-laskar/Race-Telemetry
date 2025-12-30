@@ -1,7 +1,7 @@
 import os
 from src.constants import *
 from src.utils.common import *
-from src.entity.config_entity import DataIngestionConfig, DataValidationConfig , DataTransformationConfig , ModelTrainerConfig
+from src.entity.config_entity import DataIngestionConfig, DataValidationConfig , DataTransformationConfig , ModelTrainerConfig , ModelEvaluationConfig
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -86,3 +86,18 @@ class ConfigurationManager:
         )
 
         return model_trainer_config
+
+#----------------------------------------------------------------
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        config = self.config.model_evaluation
+
+        create_directories([config.root_dir])
+
+        model_evaluation_config = ModelEvaluationConfig(
+            root_dir=Path(config.root_dir),
+            val_path=Path(config.val_path),
+            model_paths={k: Path(v) for k, v in config.models.items()},
+            scaler_paths={k: Path(v) for k, v in config.scalers.items()},
+            metrics_path=Path(config.metrics_path)
+        )
+        return model_evaluation_config

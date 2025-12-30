@@ -27,3 +27,15 @@ model_trainer:
   regression_dir: artifacts/model_trainer/regression
   classification_dir: artifacts/model_trainer/classification
   clustering_dir: artifacts/model_trainer/clustering
+
+model_evaluation:
+  root_dir: artifacts/model_evaluation
+  val_path: artifacts/data_transformation/val.csv
+  models:
+    lap_time_regressor: artifacts/model_trainer/regression/model.pkl
+    gear_classifier: artifacts/model_trainer/classification/model.pkl
+    driving_behavior: artifacts/model_trainer/clustering/model.pkl
+  scalers:
+    driving_behavior: artifacts/model_trainer/clustering/scaler.pkl
+  metrics_path: artifacts/model_evaluation/metrics.json
+

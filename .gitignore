@@ -9,3 +9,4 @@ Testing/
 .DS_Store
 .venv/
 artifacts/
+mlruns/

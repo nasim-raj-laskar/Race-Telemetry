@@ -3,7 +3,7 @@ import joblib, os
 from src.models.regression import train_regressor
 from src.models.classification import train_classifier
 from src.models.clustering import train_clustering
-from src.models.evaluation import (evaluate_regression,evaluate_classification,evaluate_clustering)
+from src.evaluators.evaluation import (evaluate_regression,evaluate_classification,evaluate_clustering)
 from src.logging.logger import logging
 from src.exception.exception import CustomException
 from sklearn.metrics import classification_report

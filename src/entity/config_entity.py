@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict
 
 @dataclass
 class DataIngestionConfig:
@@ -32,3 +33,11 @@ class ModelTrainerConfig:
     regression_dir:Path
     classification_dir:Path
     clustering_dir:Path
+
+@dataclass
+class ModelEvaluationConfig:
+    root_dir: Path
+    val_path: Path
+    model_paths: Dict[str, Path]
+    scaler_paths: Dict[str, Path]
+    metrics_path: Path
