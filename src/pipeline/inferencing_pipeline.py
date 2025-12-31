@@ -30,7 +30,7 @@ class TelemetryInferenceEngine:
             with open(MODELS_FILE_PATH) as f:
                 self.models_cfg = yaml.safe_load(f)["models"]
 
-            # ---------- Load models (FAST) ----------
+            #load models
             self.models = {}
             for model_key in self.models_cfg:
                 model_uri = self._registry_uri(model_key)
@@ -45,8 +45,8 @@ class TelemetryInferenceEngine:
                     self.models[model_key] = mlflow.sklearn.load_model(model_uri)
 
                 else:
-                    # clustering → keep pyfunc
-                    self.models[model_key] = mlflow.pyfunc.load_model(model_uri)
+                    # clustering
+                    self.models[model_key] = mlflow.sklearn.load_model(model_uri)
 
             self.state = TelemetryState()
             logging.info("Telemetry Inference Engine initialized successfully")
@@ -55,6 +55,7 @@ class TelemetryInferenceEngine:
             logging.exception("Failed to initialize inference engine")
             raise CustomException(e, sys)
 
+    #For Testing 
     def process_csv(self, csv_path: str) -> pd.DataFrame:
         """
         Sequentially replay telemetry CSV (streaming-style).
@@ -82,19 +83,20 @@ class TelemetryInferenceEngine:
             logging.exception("CSV inference failed")
             raise CustomException(e, sys)
 
+    #CORE FUNCTION
     def process_row(self, row: pd.Series) -> Dict[str, Any]:
         """
-        Process one telemetry tick (FAST per-row inference).
+        Process one telemetry tick.
         """
         try:
             output = {
                 "lap_number": row.get("lap_number"),
                 "race_position": row.get("race_position"),
 
-                #TRUE LABELS
-                "true_lap_time": row.get("current_lap_time"),
-                "true_gear": row.get("gear"),
-
+                
+                "true_lap_time": row.get("current_lap_time"),           #TRUE LABELS
+                "true_gear": row.get("gear"),                           #TRUE LABELS
+ 
                 "driving_behavior": None,
             }
 
@@ -102,7 +104,6 @@ class TelemetryInferenceEngine:
             if "lap_time_regressor" in self.models:
                 feats = self.features_cfg["lap_time_regressor"]["features"]
 
-                
                 X_reg = row[feats].values.reshape(1, -1)
 
                 output["predicted_lap_time"] = float(
@@ -113,7 +114,6 @@ class TelemetryInferenceEngine:
             if "gear_classifier" in self.models:
                 feats = self.features_cfg["gear_classifier"]["features"]
 
-                
                 X_clf = row[feats].values.reshape(1, -1)
 
                 output["predicted_gear"] = int(
@@ -151,11 +151,11 @@ class TelemetryInferenceEngine:
             logging.exception("Row inference failed")
             raise CustomException(e, sys)
 
-    # ================= HELPERS =================
+    #HELPERS
     @staticmethod
     def _registry_uri(model_key: str) -> str:
         """
-        Resolve correct MLflow registry URI per model type.
+        MLflow registry URI per model type.
         """
         return {
             "lap_time_regressor": "models:/LapTimeRegressor/Production",
