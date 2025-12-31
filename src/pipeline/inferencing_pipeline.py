@@ -67,7 +67,7 @@ class TelemetryInferenceEngine:
                 result = self.process_row(row)
                 outputs.append(result)
 
-                # 🔥 LOG EVERY 500 ROWS ONLY
+                #LOG EVERY 500 ROWS ONLY
                 if i % 500 == 0:
                     logging.info(
                         f"Row {i} | lap={result['lap_number']} | "
@@ -91,11 +91,10 @@ class TelemetryInferenceEngine:
                 "lap_number": row.get("lap_number"),
                 "race_position": row.get("race_position"),
 
-                # ---------- TRUE LABELS ----------
+                #TRUE LABELS
                 "true_lap_time": row.get("current_lap_time"),
                 "true_gear": row.get("gear"),
 
-                # Placeholder (clustering disabled)
                 "driving_behavior": None,
             }
 
@@ -103,7 +102,7 @@ class TelemetryInferenceEngine:
             if "lap_time_regressor" in self.models:
                 feats = self.features_cfg["lap_time_regressor"]["features"]
 
-                # 🔥 FAST: NumPy instead of DataFrame
+                
                 X_reg = row[feats].values.reshape(1, -1)
 
                 output["predicted_lap_time"] = float(
@@ -114,7 +113,7 @@ class TelemetryInferenceEngine:
             if "gear_classifier" in self.models:
                 feats = self.features_cfg["gear_classifier"]["features"]
 
-                # 🔥 FAST: NumPy instead of DataFrame
+                
                 X_clf = row[feats].values.reshape(1, -1)
 
                 output["predicted_gear"] = int(
@@ -122,7 +121,6 @@ class TelemetryInferenceEngine:
                 )
 
             # ================= CLUSTERING =================
-            # ❗ intentionally untouched & commented
             # completed_lap = self.state.update(row)
             #
             # if completed_lap is not None:
