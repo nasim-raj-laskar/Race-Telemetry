@@ -1,0 +1,7 @@
+Testing/
+credentials.txt
+.env
+venv/
+logs/
+artifacts/
+dataset/

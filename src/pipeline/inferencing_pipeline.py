@@ -10,10 +10,7 @@ from src.logging.logger import logging
 from src.exception.exception import CustomException
 from src.utils.telemetry_state import TelemetryState
 from src.utils.mlfow_setup import setup_mlflow
-warnings.filterwarnings(
-    "ignore",
-    message="X does not have valid feature names",
-)
+warnings.filterwarnings("ignore",message="X does not have valid feature names")
 
 class TelemetryInferenceEngine:
     def __init__(self):
