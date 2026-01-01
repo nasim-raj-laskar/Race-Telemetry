@@ -17,10 +17,10 @@ class TelemetryInferenceEngine:
         try:
             logging.info("Initializing Telemetry Inference Engine")
 
-            # ---------- DAGSHUB / MLFLOW SETUP ----------
+            #DAGSHUB / MLFLOW SETUP
             setup_mlflow(experiment_name=None)
 
-            # ---------- Load configs ----------
+            #Load configs
             with open(FEATURES_FILE_PATH) as f:
                 self.features_cfg = yaml.safe_load(f)
 
@@ -89,20 +89,15 @@ class TelemetryInferenceEngine:
             output = {
                 "lap_number": row.get("lap_number"),
                 "race_position": row.get("race_position"),
-
-                
                 "true_lap_time": row.get("current_lap_time"),           #TRUE LABELS
                 "true_gear": row.get("gear"),                           #TRUE LABELS
- 
                 "driving_behavior": None,
             }
 
             # ================= REGRESSION =================
             if "lap_time_regressor" in self.models:
                 feats = self.features_cfg["lap_time_regressor"]["features"]
-
                 X_reg = row[feats].values.reshape(1, -1)
-
                 output["predicted_lap_time"] = float(
                     self.models["lap_time_regressor"].predict(X_reg)[0]
                 )
@@ -110,37 +105,41 @@ class TelemetryInferenceEngine:
             # ================= CLASSIFICATION =================
             if "gear_classifier" in self.models:
                 feats = self.features_cfg["gear_classifier"]["features"]
-
                 X_clf = row[feats].values.reshape(1, -1)
-
                 output["predicted_gear"] = int(
                     self.models["gear_classifier"].predict(X_clf)[0]
                 )
 
-            # ================= CLUSTERING =================
-            # completed_lap = self.state.update(row)
-            #
-            # if completed_lap is not None:
-            #     agg_map = self.features_cfg["driving_behavior"]["aggregation"]
-            #
-            #     agg_df = completed_lap.agg(agg_map)
-            #
-            #     feature_row = {}
-            #     for feature, stats in agg_map.items():
-            #         for stat in stats:
-            #             col_name = f"{feature}_{stat}"
-            #             feature_row[col_name] = agg_df.loc[stat, feature]
-            #
-            #     lap_features = pd.DataFrame([feature_row])
-            #
-            #     if lap_features.isna().any().any():
-            #         lap_features = lap_features.fillna(0.0)
-            #
-            #     label = self.models["driving_behavior"].predict(lap_features)[0]
-            #
-            #     output["driving_behavior"] = (
-            #         "Aggressive Driving" if label == 1 else "Smooth Driving"
-            #     )
+            #================= CLUSTERING =================
+            completed_lap = self.state.update(row)
+
+            if completed_lap is not None:
+                agg_map = self.features_cfg["driving_behavior"]["aggregation"]
+                
+                required_cols = list(agg_map.keys())
+
+                completed_lap = completed_lap.reindex(
+                    columns=required_cols,
+                    fill_value=0.0
+                )
+
+                agg_df = completed_lap.agg(agg_map)
+
+                feature_row = {}
+
+                for feature, stats in agg_map.items():
+                    for stat in stats:
+                        feature_row[f"{feature}_{stat}"] = agg_df.loc[stat, feature]
+
+                lap_features = pd.DataFrame([feature_row])
+
+                lap_features = lap_features.fillna(0.0)
+
+                label = self.models["driving_behavior"].predict(lap_features)[0]
+
+                output["driving_behavior"] = (
+                    "Aggressive Driving" if label == 1 else "Smooth Driving"
+                )
 
             return output
 
