@@ -91,7 +91,7 @@ class TelemetryInferenceEngine:
                 "race_position": row.get("race_position"),
                 "true_lap_time": row.get("current_lap_time"),           #TRUE LABELS
                 "true_gear": row.get("gear"),                           #TRUE LABELS
-                "driving_behavior": None,
+                "driving_behavior": None,                               #Default
             }
 
             # ================= REGRESSION =================

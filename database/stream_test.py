@@ -2,7 +2,7 @@ import time
 import pandas as pd
 from src.pipeline.inferencing_pipeline import TelemetryInferenceEngine
 
-def simulated_db_stream(csv_path, delay=0.3):
+def simulated_db_stream(csv_path, delay=8.5):
     df = pd.read_csv(csv_path)
 
     for _, row in df.iterrows():

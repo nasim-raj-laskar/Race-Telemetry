@@ -10,8 +10,8 @@ from src.pipeline.model_evaluation_pipeline import ModelEvaluationPipeline
 STAGE_NAME = "Data Ingestion Stage"
 try:
     logging.info(f">>>>>> Stage {STAGE_NAME} started <<<<<<")
-    # obj = DataIngestionTrainingPipeline()
-    # obj.initiate_data_ingestion()
+    obj = DataIngestionTrainingPipeline()
+    obj.initiate_data_ingestion()
     logging.info(f">>>>>> Stage {STAGE_NAME} completed <<<<<<\n\nx================x")
 except Exception as e:
     logging.error(f"Error in stage {STAGE_NAME}")
