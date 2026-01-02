@@ -20,4 +20,7 @@ pymongo[srv]==3.12
 python-box
 ensure
 sqlalchemy
+psycopg2
 psycopg2-binary
+fastapi
+uvicorn
