@@ -34,12 +34,34 @@ def infer_next(batch_size: int = 1):
             prediction = engine.process_row(series)
 
             results.append({
+                # Identity
                 "id": row["id"],
-                "lap_number": prediction["lap_number"],
-                "race_position": prediction["race_position"],
+                "lap_number": row["lap_number"],
+                "race_position": row["race_position"],
+
+                # Raw telemetry
+                "speed": row["speed"],
+                "current_engine_rpm": row["current_engine_rpm"],
+                "avg_tire_temp": row["avg_tire_temp"],
+                "tire_stress_front": row["tire_stress_front"],
+                "tire_stress_rear": row["tire_stress_rear"],
+                "wheel_slip_magnitude_front": row["wheel_slip_magnitude_front"],
+                "wheel_slip_magnitude_rear": row["wheel_slip_magnitude_rear"],
+
+                "power" : row["power"],
+                "torque": row["torque"],
+                "boost": row["boost"],
+                "pitch" : row["pitch"],
+                "roll" : row["roll"],
+
+                "yaw": row["yaw"],
+                "steer": row["steer"],
+                "gear": row["gear"],
+
+                # ML outputs
                 "predicted_lap_time": prediction["predicted_lap_time"],
                 "predicted_gear": prediction["predicted_gear"],
-                "driving_behavior": prediction["driving_behavior"]
+                "driving_behavior": prediction["driving_behavior"],
             })
 
         return results
