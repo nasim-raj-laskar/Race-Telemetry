@@ -10,3 +10,4 @@ Testing/
 .venv/
 artifacts/
 mlruns/
+test.py
