@@ -6,15 +6,32 @@ import altair as alt
 
 # ================= CONFIG =================
 API_URL = "http://127.0.0.1:8000/infer/next"
+TRACK_IMAGE_PATH = "assets/track.png"
 
 st.set_page_config(page_title="Race Telemetry", layout="wide")
+
+# ================= GLOBAL CSS =================
+st.markdown("""
+<style>
+.ml-label {
+    font-size: 20px;
+    color: #94a3b8;
+    margin-bottom: 0px;
+}
+.ml-value {
+    font-size: 38px;       
+    font-weight: 500;
+    line-height: 2;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ================= SESSION STATE =================
 if "telemetry" not in st.session_state:
     st.session_state.telemetry = pd.DataFrame()
 
 # ================= SIDEBAR =================
-st.sidebar.title("🏎️ Pit Wall Controls")
+st.sidebar.title("Pit Wall Controls")
 auto_refresh = st.sidebar.toggle("Auto Refresh", value=True)
 refresh_interval = st.sidebar.slider("Refresh Interval (seconds)", 1, 5, 1)
 batch_size = st.sidebar.selectbox("Rows per fetch", [1, 5, 10], index=0)
@@ -30,7 +47,7 @@ def fetch_data():
         st.error(e)
         return pd.DataFrame()
 
-# ================= DATA UPDATE =================
+# ================= UPDATE DATA =================
 new_data = fetch_data()
 if not new_data.empty:
     st.session_state.telemetry = pd.concat(
@@ -47,127 +64,129 @@ latest = df.iloc[-1]
 
 # ================= TITLE =================
 st.markdown(
-    "<h4 style='text-align:center;'>🏁 Race Telemetry – Live Pit Wall</h4>",
-    unsafe_allow_html=True
-)
-
-# ================= ML OUTPUT (LIVE) =================
-st.markdown(
-    f"""
-    <div style="display:flex;justify-content:space-around;
-        background:#020617;border:1px solid #334155;
-        padding:12px;border-radius:10px;margin-bottom:20px;">
-        <div><b>Predicted Lap</b><br>
-            <span style="color:#38bdf8;font-size:18px;">
-            {latest['predicted_lap_time']:.2f} s</span></div>
-        <div><b>Recommended Gear</b><br>
-            <span style="color:#22c55e;font-size:18px;">
-            {int(latest['predicted_gear'])}</span></div>
-        <div><b>Driving Style</b><br>
-            <span style="color:#facc15;">
-            {latest['driving_behavior']}</span></div>
+    """
+    <div style="text-align:center; line-height:0;">
+        <h2>🏁 Race Telemetry</h2>
+        <h4>Pit Wall Dashboard</h4>
     </div>
     """,
     unsafe_allow_html=True
 )
 
-# ================= ROW 1 =================
-c1, c2, c3 = st.columns(3)
+# ================= TOP GRID =================
+left, right = st.columns([3, 1])
 
-c1.metric("Speed (km/h)", f"{latest['speed']:.1f}")
-c1.altair_chart(
-    alt.Chart(df).mark_line(color="#38bdf8").encode(
-        x="t:Q", y="speed:Q"
-    ),
-    use_container_width=True
-)
+# ================= LEFT SIDE =================
+with left:
 
-c2.metric("Engine RPM", int(latest["current_engine_rpm"]))
-c2.altair_chart(
-    alt.Chart(df).mark_area(color="#f97316", opacity=0.7).encode(
-        x="t:Q", y="current_engine_rpm:Q"
-    ),
-    use_container_width=True
-)
+    # ---------- ROW 1 : ML OUTPUT (STREAMLIT-NATIVE, AUTO HEIGHT) ----------
+    with st.container(border=True):
+        c1, c2, c3 = st.columns(3)
 
-c3.metric("Gear", int(latest["gear"]))
-c3.altair_chart(
-    alt.Chart(df).mark_bar(color="#22c55e").encode(
-        x="t:Q", y="gear:Q"
-    ),
-    use_container_width=True
-)
+        with c1:
+            st.markdown('<div class="ml-label">Predicted Lap</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="ml-value" style="color:#38bdf8;">{latest["predicted_lap_time"]:.2f} s</div>',
+                unsafe_allow_html=True
+            )
 
-# ================= ROW 2 =================
-c1, c2, c3 = st.columns(3)
+        with c2:
+            st.markdown('<div class="ml-label">Recommended Gear</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="ml-value" style="color:#22c55e;">{int(latest["predicted_gear"])}</div>',
+                unsafe_allow_html=True
+            )
+
+        with c3:
+            st.markdown('<div class="ml-label">Driving Style</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="ml-value" style="color:#facc15;">{latest["driving_behavior"]}</div>',
+                unsafe_allow_html=True
+            )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ---------- ROW 2 : SPEED + RPM ----------
+    r2c1, r2c2 = st.columns(2)
+
+    r2c1.metric("Speed (km/h)", f"{latest['speed']:.1f}")
+    r2c1.altair_chart(
+        alt.Chart(df).mark_line(color="#38bdf8").encode(
+            x="t:Q", y="speed:Q"
+        ),
+        use_container_width=True
+    )
+
+    r2c2.metric("Engine RPM", int(latest["current_engine_rpm"]))
+    r2c2.altair_chart(
+        alt.Chart(df).mark_area(color="#f97316", opacity=0.7).encode(
+            x="t:Q", y="current_engine_rpm:Q"
+        ),
+        use_container_width=True
+    )
+
+# ================= TRACK IMAGE (ROWS 1–2) =================
+with right:
+    st.markdown("###  Track")
+    st.image(TRACK_IMAGE_PATH, use_container_width=True)
+
+# ================= ROW 3 : POWER / TORQUE / BOOST / TIRE =================
+p1, p2, p3, p4 = st.columns(4)
 
 df["power_kw"] = df["power"] / 1000
 
-c1.metric("Power (kW)", f"{df['power_kw'].iloc[-1]:.1f}")
-c1.altair_chart(
+p1.metric("Power (kW)", f"{df['power_kw'].iloc[-1]:.1f}")
+p1.altair_chart(
     alt.Chart(df).mark_area(color="#a855f7", opacity=0.6).encode(
         x="t:Q", y="power_kw:Q"
     ),
     use_container_width=True
 )
 
-c2.metric("Torque (Nm)", f"{latest['torque']:.1f}")
-c2.altair_chart(
+p2.metric("Torque (Nm)", f"{latest['torque']:.1f}")
+p2.altair_chart(
     alt.Chart(df).mark_line(color="#ef4444").encode(
         x="t:Q", y="torque:Q"
     ),
     use_container_width=True
 )
 
-c3.metric("Boost (psi)", f"{latest['boost']:.2f}")
-c3.altair_chart(
+p3.metric("Boost (psi)", f"{latest['boost']:.2f}")
+p3.altair_chart(
     alt.Chart(df).mark_line(color="#0ea5e9").encode(
         x="t:Q", y="boost:Q"
     ),
     use_container_width=True
 )
 
-# ================= ROW 3 =================
-c1, c2 = st.columns(2)
-
-c1.metric("Avg Tire Temp (°C)", f"{latest['avg_tire_temp']:.1f}")
-c1.altair_chart(
+p4.metric("Avg Tire Temp (°C)", f"{latest['avg_tire_temp']:.1f}")
+p4.altair_chart(
     alt.Chart(df).mark_line(color="#facc15").encode(
         x="t:Q", y="avg_tire_temp:Q"
     ),
     use_container_width=True
 )
 
-slip_chart = alt.Chart(df).transform_fold(
-    ["wheel_slip_magnitude_front", "wheel_slip_magnitude_rear"],
-    as_=["Wheel", "Slip"]
-).mark_area(opacity=0.6).encode(
-    x="t:Q",
-    y="Slip:Q",
-    color=alt.Color("Wheel:N", scale=alt.Scale(
-        range=["#22c55e", "#ef4444"]
-    ))
-)
-c2.metric("Rear Wheel Slip", f"{latest['wheel_slip_magnitude_rear']:.2f}")
-c2.altair_chart(slip_chart, use_container_width=True)
-
-# ================= ATTITUDE =================
+# ================= ROW 4 : YAW / PITCH / ROLL =================
 attitude_chart = alt.Chart(df).transform_fold(
     ["yaw", "pitch", "roll"],
     as_=["Axis", "Value"]
 ).mark_line(strokeWidth=2).encode(
     x="t:Q",
     y="Value:Q",
-    color=alt.Color("Axis:N", scale=alt.Scale(
-        range=["#38bdf8", "#f97316", "#a855f7"]
-    ))
+    color=alt.Color(
+        "Axis:N",
+        scale=alt.Scale(range=["#38bdf8", "#f97316", "#a855f7"])
+    )
 )
 
-st.metric("Yaw / Pitch / Roll (rad)",
-          f"{latest['yaw']:.2f}, {latest['pitch']:.2f}, {latest['roll']:.2f}")
+st.metric(
+    "Yaw / Pitch / Roll (rad)",
+    f"{latest['yaw']:.2f}, {latest['pitch']:.2f}, {latest['roll']:.2f}"
+)
 st.altair_chart(attitude_chart, use_container_width=True)
 
-# ================= AUTO REFRESH (THE FIX) =================
+# ================= REFRESH =================
 if auto_refresh:
     time.sleep(refresh_interval)
     st.rerun()
