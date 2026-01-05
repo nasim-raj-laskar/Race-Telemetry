@@ -4,13 +4,13 @@ import requests
 import time
 import altair as alt
 
-# ================= CONFIG =================
+#CONFIG
 API_URL = "http://127.0.0.1:8000/infer/next"
 TRACK_IMAGE_PATH = "assets/track.png"
 
 st.set_page_config(page_title="Race Telemetry", layout="wide")
 
-# ================= GLOBAL CSS =================
+#GLOBAL CSS
 st.markdown("""
 <style>
 .ml-label {
@@ -26,17 +26,17 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ================= SESSION STATE =================
+#SESSION STATE
 if "telemetry" not in st.session_state:
     st.session_state.telemetry = pd.DataFrame()
 
-# ================= SIDEBAR =================
+#SIDEBAR
 st.sidebar.title("Pit Wall Controls")
 auto_refresh = st.sidebar.toggle("Auto Refresh", value=True)
 refresh_interval = st.sidebar.slider("Refresh Interval (seconds)", 1, 5, 1)
 batch_size = st.sidebar.selectbox("Rows per fetch", [1, 5, 10], index=0)
 
-# ================= FETCH =================
+#FETCH
 def fetch_data():
     try:
         r = requests.get(API_URL, params={"batch_size": batch_size}, timeout=5)
@@ -47,7 +47,7 @@ def fetch_data():
         st.error(e)
         return pd.DataFrame()
 
-# ================= UPDATE DATA =================
+#UPDATE DATA
 new_data = fetch_data()
 if not new_data.empty:
     st.session_state.telemetry = pd.concat(
@@ -62,7 +62,7 @@ if df.empty:
 df["t"] = range(len(df))
 latest = df.iloc[-1]
 
-# ================= TITLE =================
+#TITLE
 st.markdown(
     """
     <div style="text-align:center; line-height:0;">
@@ -73,13 +73,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ================= TOP GRID =================
+#TOP GRID
 left, right = st.columns([3, 1])
 
-# ================= LEFT SIDE =================
+#LEFT SIDE
 with left:
 
-    # ---------- ROW 1 : ML OUTPUT (STREAMLIT-NATIVE, AUTO HEIGHT) ----------
+    #ROW 1 : ML OUTPUT
     with st.container(border=True):
         c1, c2, c3 = st.columns(3)
 
@@ -106,7 +106,7 @@ with left:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ---------- ROW 2 : SPEED + RPM ----------
+    #ROW 2 : SPEED + RPM
     r2c1, r2c2 = st.columns(2)
 
     r2c1.metric("Speed (km/h)", f"{latest['speed']:.1f}")
@@ -125,12 +125,12 @@ with left:
         use_container_width=True
     )
 
-# ================= TRACK IMAGE (ROWS 1–2) =================
+#TRACK IMAGE (ROWS 1–2)
 with right:
     st.markdown("###  Track")
     st.image(TRACK_IMAGE_PATH, use_container_width=True)
 
-# ================= ROW 3 : POWER / TORQUE / BOOST / TIRE =================
+#ROW 3 : POWER / TORQUE / BOOST / TIRE
 p1, p2, p3, p4 = st.columns(4)
 
 df["power_kw"] = df["power"] / 1000
@@ -167,7 +167,7 @@ p4.altair_chart(
     use_container_width=True
 )
 
-# ================= ROW 4 : YAW / PITCH / ROLL =================
+#ROW 4 : YAW / PITCH / ROLL
 attitude_chart = alt.Chart(df).transform_fold(
     ["yaw", "pitch", "roll"],
     as_=["Axis", "Value"]
@@ -186,7 +186,7 @@ st.metric(
 )
 st.altair_chart(attitude_chart, use_container_width=True)
 
-# ================= REFRESH =================
+#REFRESH
 if auto_refresh:
     time.sleep(refresh_interval)
     st.rerun()
