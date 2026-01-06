@@ -1,19 +1,29 @@
+import os
 import dagshub
 import mlflow
 from src.logging.logger import logging
 
 
-def setup_mlflow(experiment_name: str | None = None):
-    logging.info("Initializing DAGsHub MLflow")
+def setup_mlflow(experiment_name=None):
+    try:
+        token = os.getenv("DAGSHUB_USER_TOKEN")
+        if not token:
+            raise RuntimeError("DAGSHUB_USER_TOKEN not set")
 
-    dagshub.init(
-        repo_owner="nasim-raj-laskar",
-        repo_name="race-telemetry",
-        mlflow=True
-    )
+        os.environ["DAGSHUB_USER_TOKEN"] = token
 
-    if experiment_name:
-        mlflow.set_experiment(experiment_name)
+        dagshub.init(
+            repo_owner="nasim-raj-laskar",
+            repo_name="race-telemetry",
+            mlflow=True
+        )
 
-    logging.info(f"MLflow tracking URI: {mlflow.get_tracking_uri()}")
-    logging.info("DAGsHub MLflow initialized successfully")
+        if experiment_name:
+            mlflow.set_experiment(experiment_name)
+
+        logging.info("DAGsHub MLflow initialized successfully")
+
+    except Exception as e:
+        logging.warning(
+            f"DAGsHub MLflow initialization skipped: {e}"
+        )

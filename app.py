@@ -3,9 +3,10 @@ import pandas as pd
 import requests
 import time
 import altair as alt
+import os
 
 #CONFIG
-API_URL = "http://127.0.0.1:8000/infer/next"
+API_URL = os.getenv("API_URL", "http://127.0.0.1:8000/infer/next")
 TRACK_IMAGE_PATH = "assets/track.png"
 
 st.set_page_config(page_title="Race Telemetry", layout="wide")
@@ -49,6 +50,7 @@ def fetch_data():
 
 #UPDATE DATA
 new_data = fetch_data()
+
 if not new_data.empty:
     st.session_state.telemetry = pd.concat(
         [st.session_state.telemetry, new_data],

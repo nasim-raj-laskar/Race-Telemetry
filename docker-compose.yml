@@ -1,6 +1,39 @@
 version: "3.9"
 
 services:
+  backend:
+    build: .
+    container_name: telemetry-backend
+    command: >
+      uvicorn backend.main:app
+      --host 0.0.0.0
+      --port 8000
+      --log-level info
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+      - ./artifacts:/app/artifacts
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: .
+    container_name: telemetry-frontend
+    command: >
+      streamlit run app.py
+      --server.port 8501
+      --server.address 0.0.0.0
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+
   prometheus:
     image: prom/prometheus
     volumes:
@@ -17,6 +50,5 @@ services:
 
   node-exporter:
     image: prom/node-exporter
-    container_name: node-exporter
     ports:
       - "9100:9100"

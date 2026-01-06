@@ -8,6 +8,7 @@ from src.pipeline.inferencing_pipeline import TelemetryInferenceEngine
 from prometheus_client import make_asgi_app
 import pandas as pd
 import time
+import os
 
 TRAIN_DF = pd.read_csv("artifacts/data_transformation/val.csv")
 
