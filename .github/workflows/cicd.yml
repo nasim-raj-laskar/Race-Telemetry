@@ -25,60 +25,60 @@ jobs:
       - name: Run tests (placeholder)
         run: echo "testing..."
 
-  build-and-push:
-    name: Build & Push Image to ECR
-    needs: ci
-    runs-on: ubuntu-latest
+  # build-and-push:
+  #   name: Build & Push Image to ECR
+  #   needs: ci
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+  #     - name: Login to Amazon ECR
+  #       id: login-ecr
+  #       uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build, tag and push image
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: telemetry
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -t $REPOSITORY .
-          docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:latest
-          docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          docker push $REGISTRY/$REPOSITORY:latest
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+  #     - name: Build, tag and push image
+  #       env:
+  #         REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #         REPOSITORY: telemetry
+  #         IMAGE_TAG: ${{ github.sha }}
+  #       run: |
+  #         docker build -t $REPOSITORY .
+  #         docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:latest
+  #         docker tag $REPOSITORY:latest $REGISTRY/$REPOSITORY:$IMAGE_TAG
+  #         docker push $REGISTRY/$REPOSITORY:latest
+  #         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
 
-  deploy:
-    name: Deploy to EC2
-    needs: build-and-push
-    runs-on: self-hosted
+  # deploy:
+  #   name: Deploy to EC2
+  #   needs: build-and-push
+  #   runs-on: self-hosted
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v4
 
-      - name: Login to ECR
-        run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
-          | docker login --username AWS --password-stdin \
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+  #     - name: Login to ECR
+  #       run: |
+  #         aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
+  #         | docker login --username AWS --password-stdin \
+  #         ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
-      - name: Deploy using docker-compose
-        run: |
-          docker compose \
-            --env-file /home/ubuntu/.env \
-            -f docker-compose.prod.yml pull
-          docker compose \
-            --env-file /home/ubuntu/.env \
-            -f docker-compose.prod.yml up -d
+  #     - name: Deploy using docker-compose
+  #       run: |
+  #         docker compose \
+  #           --env-file /home/ubuntu/.env \
+  #           -f docker-compose.prod.yml pull
+  #         docker compose \
+  #           --env-file /home/ubuntu/.env \
+  #           -f docker-compose.prod.yml up -d
 
