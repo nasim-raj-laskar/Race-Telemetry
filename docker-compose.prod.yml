@@ -34,3 +34,8 @@ services:
     image: grafana/grafana
     ports:
       - "3000:3000"
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - "9100:9100"
