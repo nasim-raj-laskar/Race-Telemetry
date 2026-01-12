@@ -57,7 +57,7 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:latest
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-          
+
   deploy:
     name: Deploy to EC2
     needs: build-and-push
@@ -75,6 +75,10 @@ jobs:
 
       - name: Deploy using docker-compose
         run: |
-          export ECR_IMAGE=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/telemetry:latest
-          docker compose -f docker-compose.prod.yml pull
-          docker compose -f docker-compose.prod.yml up -d
+          docker compose \
+            --env-file /home/ubuntu/.env \
+            -f docker-compose.prod.yml pull
+          docker compose \
+            --env-file /home/ubuntu/.env \
+            -f docker-compose.prod.yml up -d
+
