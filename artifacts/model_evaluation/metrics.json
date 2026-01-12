@@ -1,0 +1,16 @@
+{
+    "lap_time_regressor": {
+        "rmse": 9.116389704379486,
+        "mae": 5.834431895627875,
+        "r2": 0.9598442903164602
+    },
+    "gear_classifier": {
+        "accuracy": 0.9460545800719272,
+        "precision_macro": 0.9561273771039349,
+        "recall_macro": 0.8209450206430615,
+        "f1_macro": 0.8723896702775227
+    },
+    "driving_behavior": {
+        "silhouette_score": 0.23027996040316762
+    }
+}

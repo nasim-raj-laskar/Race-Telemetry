@@ -8,7 +8,6 @@ __pycache__/
 Testing/
 .DS_Store
 .venv/
-artifacts/
 mlruns/
 test.py
 Art.png
