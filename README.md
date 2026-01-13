@@ -1,6 +1,15 @@
-# 🏁 Race Telemetry
+# 🏁 Race Telemetry - Production MLOps Platform
 
-A MLOps platform for real-time Motorsports telemetry analysis with automated model training,Pit wall Dashboard, drift detection, and production deployment on AWS infrastructure.
+[![Python](https://img.shields.io/badge/Python-3.12.5-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.128.0-green.svg)](https://fastapi.tiangolo.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.52.2-red.svg)](https://streamlit.io/)
+[![Docker](https://img.shields.io/badge/Docker-28.3.3-blue.svg)](https://www.docker.com/)
+[![AWS](https://img.shields.io/badge/AWS-ECR%20%7C%20EC2-orange.svg)](https://aws.amazon.com/)
+[![MLflow](https://img.shields.io/badge/MLflow-Tracking-lightblue.svg)](https://mlflow.org/)
+[![Prometheus](https://img.shields.io/badge/Prometheus-Monitoring-red.svg)](https://prometheus.io/)
+[![Grafana](https://img.shields.io/badge/Grafana-Dashboards-orange.svg)](https://grafana.com/)
+
+Production-oriented MLOps platform for real-time Motorsports telemetry analysis with automated model training, Pit Wall Monitoring Dashboard ,drift detection, and production deployment on AWS infrastructure.
 
 ## 🏗️ System Architecture
 
@@ -150,5 +159,13 @@ Race-Telemetry/
 - **Model Accuracy**: Lap time RMSE < 0.5s, Gear accuracy > 95%
 - **Drift Detection**: Real-time PSI monitoring
 - **Scalability**: Horizontal scaling ready
+
+
+## 🧠 Design Decisions
+
+- Training and inference are decoupled to prevent production outages caused by failed retraining runs.
+- Models are loaded dynamically at inference time to support versioned rollouts and rollback.
+- Artifacts are externalized to avoid container immutability violations.
+- CI/CD uses a self-hosted runner to enable Docker-in-Docker and direct EC2 deployment.
 
 ---
