@@ -27,7 +27,7 @@ This dataset is sourced from in-game telemetry and reflects realistic racing beh
   <img src="assets/track.png" alt="Track Layout" width="300">
 </p>
 
-## 🎯 Production Dashboard
+## 🎯 Dashboard
 
 ### Pit Wall Interface
 ![Pit Wall Dashboard](assets/pitwall-ui.png)
@@ -51,7 +51,25 @@ This dataset is sourced from in-game telemetry and reflects realistic racing beh
 
 ### Lap Time Prediction (XGBoost Regression)
 - **Target**: `current_lap_time`
-- **Features**: Speed, RPM, power, torque, boost, tire temperature
+- **Features**:     - speed, current_engine_rpm
+    ,acceleration_magnitude
+    , velocity_magnitude
+    ,tire_stress_front
+    ,tire_stress_rear
+    , wheel_slip_magnitude_front
+    , wheel_slip_magnitude_rear
+    , avg_tire_temp
+    , power
+    , torque
+    , boost
+    , yaw
+    , pitch
+    , roll
+    , steer
+    , rpm_speed_ratio
+    , gear
+    , lap_number
+    , race_position
 - **Hyperparameters**: 600 estimators, 0.03 learning rate, depth 4
 
 ### Gear Optimization (Random Forest Classification)
