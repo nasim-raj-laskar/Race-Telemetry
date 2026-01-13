@@ -1,6 +1,6 @@
-# 🏁 Race Telemetry - Production MLOps Platform
+# 🏁 Race Telemetry - MLOps Platform
 
-Enterprise-grade MLOps platform for real-time Formula 7 race car telemetry analysis with automated model training, drift detection, and production deployment on AWS infrastructure.
+MLOps platform for real-time Motorsports telemetry analysis with automated model training,Pit wall Dashboard, drift detection, and production deployment on AWS infrastructure.
 
 ## 🏗️ System Architecture
 
