@@ -4,7 +4,7 @@ Enterprise-grade MLOps platform for real-time Formula 7 race car telemetry analy
 
 ## 🏗️ System Architecture
 
-![Workflow Architecture](assets/workflow.png)
+![Workflow Architecture](assets/worklfow.png)
 
 ## 📊 Dataset Overview
 
