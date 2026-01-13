@@ -51,35 +51,17 @@ This dataset is sourced from in-game telemetry and reflects realistic racing beh
 
 ### Lap Time Prediction (XGBoost Regression)
 - **Target**: `current_lap_time`
-- **Features**:     - speed, current_engine_rpm
-    ,acceleration_magnitude
-    , velocity_magnitude
-    ,tire_stress_front
-    ,tire_stress_rear
-    , wheel_slip_magnitude_front
-    , wheel_slip_magnitude_rear
-    , avg_tire_temp
-    , power
-    , torque
-    , boost
-    , yaw
-    , pitch
-    , roll
-    , steer
-    , rpm_speed_ratio
-    , gear
-    , lap_number
-    , race_position
+- **Features**: Speed, RPM, power, torque, boost, tire temperature etc.
 - **Hyperparameters**: 600 estimators, 0.03 learning rate, depth 4
 
 ### Gear Optimization (Random Forest Classification)
 - **Target**: `gear`
-- **Features**: Speed, RPM, throttle position, track position
+- **Features**: Speed, RPM, throttle position, track position etc.
 - **Hyperparameters**: 20 estimators, depth 4, min samples 100
 
 ### Driving Behavior Clustering (K-Means)
 - **Clusters**: 2 (Conservative vs Aggressive)
-- **Analysis**: Wheel slip, steering variance, tire stress patterns
+- **Analysis**: Wheel slip, steering variance, tire stress patterns etc.
 - **Key Differentiators**: Slip ratios, RPM variability, steering corrections
 
 ## 🔄 MLOps Pipeline
@@ -92,7 +74,7 @@ python main.py
 **Execution Flow**:
 1. **Data Ingestion**: MongoDB Atlas → CSV extraction
 2. **Data Validation**: Schema compliance & quality checks
-3. **Feature Engineering**: Temporal & vehicle dynamics features
+3. **Feature Engineering**: Temporal & vehicle dynamics feature enginerring 
 4. **Model Training**: Multi-model training (regression/classification/clustering)
 5. **Model Evaluation**: Performance metrics & DagsHub tracking
 
@@ -146,19 +128,18 @@ git push origin main
 Race-Telemetry/
 ├── src/                    # ML Pipeline Components
 │   ├── components/         # Data processing modules
-│   ├── models/            # Algorithm implementations
-│   ├── pipeline/          # Training & inference workflows
-│   └── utils/             # Shared utilities
-├── backend/               # FastAPI Production API
-├── notebooks/             # EDA & Research
-│   └── eda_plots/        # Generated visualizations
-├── config/                # Configuration files
-├── monitoring/            # Observability stack
-├── artifacts/             # Model artifacts & datasets
-├── .github/workflows/     # CI/CD automation
-├── app.py                # Streamlit dashboard
-├── main.py               # Training orchestrator
-├── docker-compose.yml    # Local development
+│   ├── models/             # Algorithm implementations
+│   ├── pipeline/           # Training & inference workflows
+│   └── utils/              # Shared utilities
+├── backend/                # FastAPI Production API
+├── notebooks/              # EDA & Research
+├── config/                 # Configuration files
+├── monitoring/             # Observability stack
+├── artifacts/              # Model artifacts & datasets
+├── .github/workflows/      # CI/CD automation
+├── app.py                  # Streamlit dashboard
+├── main.py                 # Training orchestrator
+├── docker-compose.yml      # Local development
 └── docker-compose.prod.yml # Production deployment
 ```
 
@@ -171,5 +152,3 @@ Race-Telemetry/
 - **Scalability**: Horizontal scaling ready
 
 ---
-
-**Built for production-grade Formula 7 telemetry analysis**
