@@ -1,6 +1,6 @@
-# 🏁 Race Telemetry - MLOps Platform
+# 🏁 Race Telemetry
 
-MLOps platform for real-time Motorsports telemetry analysis with automated model training,Pit wall Dashboard, drift detection, and production deployment on AWS infrastructure.
+A MLOps platform for real-time Motorsports telemetry analysis with automated model training,Pit wall Dashboard, drift detection, and production deployment on AWS infrastructure.
 
 ## 🏗️ System Architecture
 
@@ -23,7 +23,9 @@ Each row represents a telemetry snapshot at a specific moment in time, making th
 This dataset is sourced from in-game telemetry and reflects realistic racing behavior within the constraints of the simulation environment.
 
 ### Rio de Janeiro Circuit
-![Track Layout](assets/track.png)
+<p align="center">
+  <img src="assets/track.png" alt="Track Layout" width="300">
+</p>
 
 ## 🎯 Production Dashboard
 
