@@ -1,4 +1,4 @@
-# 🏁 Race Telemetry - Production MLOps Platform
+# 🏁 Race Telemetry - MLOps Platform
 
 [![Python](https://img.shields.io/badge/Python-3.12.5-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128.0-green.svg)](https://fastapi.tiangolo.com/)
