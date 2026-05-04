@@ -160,6 +160,7 @@ Race-Telemetry/
 - **Drift Detection**: Real-time PSI monitoring
 - **Scalability**: Horizontal scaling ready
 
+### Live demo - [click here](https://huggingface.co/spaces/Nasim435/Race-Telemetry)
 
 ## 🧠 Design Decisions
 
